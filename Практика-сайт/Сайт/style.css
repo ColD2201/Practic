@@ -1,0 +1,117 @@
+﻿*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color:#000000;
+}
+
+:root{
+   /*Формула для размера*/
+    --index: calc(1vw + 1vh);
+    /*Трансформация*/
+    --transtion: cubic-bezier(0.1, 0.7, 0.1);
+}
+
+.wrapper{
+    /*Центр страницы*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    /*Удаляем скролл*/
+    overflow: hidden;
+}
+
+.items {
+    display: flex;
+    gap: 0.4rem;
+    /*Прикольный эффект 3D*/
+    perspective: calc(var(--index) * 35);
+}
+
+.item {
+    width:calc(var(--index) * 3);
+    height: calc(var(--index) * 12);
+
+    background-color: #0026ff;
+    background-size: cover;
+    background-position:center;
+    cursor:pointer;
+    /*Затемним немного*/
+    filter: grayscale(1) brightness(0.7);
+
+    /*Медленно и красиво*/
+    transition: transform 1.25s var(--transtion), filter 3s var(--transtion), width 1.25s var(--transtion);
+
+    /*Интересная функция с интернета, помогает браузеру заранее знать об изменении элемента(Хз,работает ли она. Пока не понял.)*/
+    will-change: transform, filter, rotateY, width;
+
+}
+
+/*Балуемся с ховером*/
+.items .item:hover {
+    filter:inherit;
+    /*Живые фотки POG*/
+    transform: translateZ(calc(var(--index) * 10));
+}
+
+/*Попытка убрать тряску*/
+.item:before,
+.item:after {
+    content: '';
+    position:absolute;
+    height:100%;
+    width: var(--index);
+    right: calc(var(--index) * -1);
+
+}
+
+/*Красивый переход*/
+/*Правая сторона*/
+.items .item:hover + * {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
+    z-index: -1;
+}
+
+.items .item:hover + * + *{
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
+    z-index: -2;
+}
+
+.items .item:hover + * + * + *  {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 2.5)) rotateY(30deg);
+    z-index: -3;
+}
+
+/*Левая сторона*/
+.items .item:has(+ :hover) {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
+}
+
+.items .item:has(+ * + :hover) {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
+}
+
+.items .item:has(+ * + * + :hover) {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 2.5)) rotateY(-30deg);
+}
+
+/*Кликабельные фоточки*/
+.items .item:active,
+.items .item:focus {
+    width: 28vw;
+    filter: inherit;
+    z-index: 100;
+    transform: translateZ(calc(var(--index) * 10));
+    margin: 0 0.45vw;
+}
